@@ -1,6 +1,8 @@
 zmq-omdp
 ========
 
+ZeroMQ Obsessive Majordomo Protocol: enhanced version of ZeroMQ Majordomo Protocol (MDP) v0.2 protocol for Node.JS.
+
 ####Credits
 Based on https://github.com/nuh-temp/zmq-mdp2 project
 
