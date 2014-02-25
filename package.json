@@ -1,26 +1,37 @@
 {
-    "name": "zmq-omdp",
-    "version": "0.0.1",
-    "private": false,
-    "description": "ZeroMQ Obsessive Majordomo Protocol: enhanced version of ZeroMQ Majordomo Protocol (MDP) v0.2 protocol for Node.JS.",
-    "contributors": [
-        {
-          "name": "prdn",
-          "email": "paolo.ardoino@gmail.com"
-        }
-    ],
-    "keywords": [
-        "nodejs",
-        "zmq",
-        "zeromq",
-        "mdp",
-        "Majordomo"
-    ],
-    "dependencies": {
-        "zmq": "",
-        "debug": ""
-    },
-    "engine": {
-        "node": ">=0.10"
-    }
+	"name": "zmq-omdp",
+		"version": "0.0.1",
+		"private": false,
+		"description": "ZeroMQ Obsessive Majordomo Protocol: enhanced version of ZeroMQ Majordomo Protocol (MDP) v0.2 protocol for Node.JS.",
+		"contributors": [
+			"prdn <paolo.ardoino@gmail.com>"
+		],
+		"keywords": [
+			"nodejs",
+			"zmq",
+			"zeromq",
+			"mdp",
+			"Majordomo"
+		],
+		"dependencies": {
+			"zmq": "",
+			"debug": ""
+		},
+		"engine": {
+			"node": ">=0.10"
+		},
+		"main": "index.js",
+		"directories": {
+			"example": "examples"
+		},
+		"devDependencies": {},
+		"scripts": {
+			"test": "echo \"Error: no test specified\" && exit 1"
+		},
+		"repository": {
+			"type": "git",
+			"url": "git@github-prdn:prdn/zmq-omdp.git"
+		},
+		"author": "prdn <paolo.ardoino@gmail.com> (http://ardoino.com/)",
+		"license": "ISC"
 }
