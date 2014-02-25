@@ -1,0 +1,26 @@
+{
+    "name": "zmq-omdp",
+    "version": "0.0.1",
+    "private": false,
+    "description": "ZeroMQ Angry Majordomo Protocol: enhanced version of ZeroMQ Majordomo Protocol (MDP) v0.2 protocol for Node.JS.",
+    "contributors": [
+        {
+          "name": "prdn",
+          "email": "paolo.ardoino@gmail.com"
+        }
+    ],
+    "keywords": [
+        "nodejs",
+        "zmq",
+        "zeromq",
+        "mdp",
+        "Majordomo"
+    ],
+    "dependencies": {
+        "zmq": "",
+        "debug": ""
+    },
+    "engine": {
+        "node": ">=0.10"
+    }
+}
