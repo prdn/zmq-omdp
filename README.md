@@ -13,3 +13,8 @@ Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 
 #### Roadmap
 * Add authentication support through [zmq-zap](https://github.com/msealand/zmq-zap.node) ZeroMQ ZAP to trust Clients and Workers.
+
+#### Follow me
+
+* Fincluster - cloud financial platform : [fincluster](http://fincluster.com) /  [@fincluster](https://twitter.com/fincluster)
+* My personal blog : [ardoino.com](http://ardoino.com) / [@paoloardoino](https://twitter.com/paoloardoino)
