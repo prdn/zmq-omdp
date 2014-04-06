@@ -1,8 +1,9 @@
 var cluster = require('cluster');
 var Worker = require('./../index').Worker;
+var numCPUs = require('os').cpus().length;
 
 if (cluster.isMaster) {
-	for (var i = 0; i < 4; i++) {
+	for (var i = 0; i < numCPUs; i++) {
 		cluster.fork();
 	}
 	cluster.on('exit', function(worker, code, signal) {
@@ -12,18 +13,16 @@ if (cluster.isMaster) {
 
 	(function() {
 		var worker = new Worker('tcp://localhost:5555', 'echo');
-			worker.start();
+		worker.start();
 
 		function go(inp, rep) {
-
-			console.log(inp);
 
 			function partial() {
 				if (!rep.active()) {
 					final();
 					return;
 				}
-				rep.write("prova-" + rep.rid + '-' + (new Date().getTime()));
+				rep.write("REPLY_PARTIAL-" + rep.rid + '-' + (new Date().getTime()));
 			}
 
 			function final() {
@@ -31,21 +30,21 @@ if (cluster.isMaster) {
 				if (!rep.active()) {
 					return;
 				}
-				rep.end("prova-end");
+				rep.end("REPLY-" + rep.rid + '-' + (new Date().getTime()));
 			}
 
-			if (inp.spot) {
-				setTimeout(function() {
-					final();
-				}, 1000);
-			} else {
+			if (inp.partial) {
 				var rtmo = setInterval(function() {
 					partial();	
 				}, 250);
 
 				setTimeout(function() {
 					final();
-				}, 100000);
+				}, 15000);
+			} else {
+				setTimeout(function() {
+					final();
+				}, 1000);
 			}
 		}
 
