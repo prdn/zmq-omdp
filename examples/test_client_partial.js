@@ -11,9 +11,9 @@ for (var i = 0; i < 10; i++) {
 			"echo", { partial: true, foo: 'bar' }, 
 			function(data) {
 				console.log("REPLY_PARTIAL", i);  
-			}, function() {
+			}, function(err, data) {
 				rcnt++;
-				console.log("REPLY_FINAL", i, rcnt);
+				console.log("REPLY_FINAL", i, rcnt, err, data);
 			}
 		);
 	})(i);

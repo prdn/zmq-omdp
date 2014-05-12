@@ -10,9 +10,9 @@ for (var i = 0; i < 10; i++) {
 		client.request(
 			"echo", { foo: 'bar' }, 
 			function() {},
-			function() {
+			function(err, data) {
 				rcnt++;
-				console.log("REPLY", i, rcnt);
+				console.log("REPLY", i, rcnt, err, data);
 			}
 		);
 	})(i);
