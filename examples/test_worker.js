@@ -28,6 +28,7 @@ if (cluster.isMaster) {
 			function final() {
 				clearInterval(rtmo);
 				if (!rep.active()) {
+					console.log("REQ INACTIVE");
 					return;
 				}
 				rep.end("REPLY-" + rep.rid + '-' + (new Date().getTime()));
