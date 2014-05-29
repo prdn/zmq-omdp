@@ -22,7 +22,7 @@ if (cluster.isMaster) {
 					final();
 					return;
 				}
-				rep.write("REPLY_PARTIAL-" + rep.rid + '-' + (new Date().getTime()));
+				rep.write("REPLY_PARTIAL-" + (new Date().getTime()));
 			}
 
 			function final() {
@@ -31,7 +31,7 @@ if (cluster.isMaster) {
 					console.log("REQ INACTIVE");
 					return;
 				}
-				rep.end("REPLY-" + rep.rid + '-' + (new Date().getTime()));
+				rep.end("REPLY-" + (new Date().getTime()));
 			}
 
 			if (inp.partial) {
