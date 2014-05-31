@@ -34,6 +34,10 @@ if (cluster.isMaster) {
 				if (!rep.active()) {
 					console.log("REQ INACTIVE");
 				}
+				if (rep.closed()) {
+					console.log("REQ ALREADY CLOSED");
+					return;
+				}
 				rep.end("REPLY-" + (new Date().getTime()));
 			}
 
