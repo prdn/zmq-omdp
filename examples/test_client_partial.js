@@ -5,7 +5,7 @@ client.start();
 
 var rcnt = 0;
 
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 30; i++) {
 	(function(i) {
 		client.request(
 			"echo", { partial: true, foo: 'bar' }, 

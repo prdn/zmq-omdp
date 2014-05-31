@@ -15,6 +15,10 @@ if (cluster.isMaster) {
 		var worker = new Worker('tcp://localhost:5555', 'echo');
 		worker.start();
 
+		worker.on('error', function(e) {
+			throw new Error(e);
+		});
+
 		function go(inp, rep) {
 
 			function partial() {
@@ -29,7 +33,6 @@ if (cluster.isMaster) {
 				clearInterval(rtmo);
 				if (!rep.active()) {
 					console.log("REQ INACTIVE");
-					return;
 				}
 				rep.end("REPLY-" + (new Date().getTime()));
 			}
@@ -41,7 +44,7 @@ if (cluster.isMaster) {
 
 				setTimeout(function() {
 					final();
-				}, 15000);
+				}, 30000);
 			} else {
 				setTimeout(function() {
 					final();
