@@ -16,14 +16,15 @@ Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 * Worker / Broker heartbeating for active / in-progress requests. Allow Clients to detect whenever a Worker quits or dies while processing a Client request.
 
 #### Protocol (good for an RFC)
-* Client <-> Broker heartbeating 
-* Worker <-> Broker heartbeating
-* Broker MAY track Worker/Client/Request relation
-* Broker MAY flag disconnected/dead Client's requests as inactive  
-* Broker MAY notify Worker about running Request status
-* Worker MAY decide to stop an inactive Request
-* Worker SHALL NOT send more W_REPLY (for a Request) after sending first W_REPLY message
-* Broker SHALL force disconnect Broker if any error occurs
+* Worker <-> Broker heartbeating.
+* Broker MAY track Worker/Client/Request relation.
+* Broker MAY notify Client on Request dispatch to Worker.
+* Client MAY send heartbeat for active request. If the request is being processed by Worker, Broker forwards heartbeat to Worker. 
+* Worker MAY decide to stop an inactive Request (tracks liveness for Request).
+* Worker MAY send heartbeat for active request. Broker forwards heartbeat to Client.
+* Client MAY decide to timeout an inactive Request (tracks liveness for Request).
+* Worker SHALL NOT send more W_REPLY (for a Request) after sending first W_REPLY message.
+* Broker SHALL force disconnect Broker if any error occurs.
 
 #### Roadmap
 * Add authentication support through [zmq-zap](https://github.com/msealand/zmq-zap.node) ZeroMQ ZAP to trust Clients and Workers.
