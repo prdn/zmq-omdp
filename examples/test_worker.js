@@ -22,6 +22,7 @@ if (cluster.isMaster) {
 		function go(inp, rep) {
 
 			function partial() {
+				rep.heartbeat();
 				if (!rep.active()) {
 					final();
 					return;
