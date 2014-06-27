@@ -22,6 +22,8 @@ Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 * Client MAY send heartbeat for active request. If the request is being processed by Worker, Broker forwards heartbeat to Worker. 
 * Worker MAY decide to stop an inactive Request (tracks liveness for Request).
 * Worker MAY send heartbeat for active request. Broker forwards heartbeat to Client.
+* Client MAY assign a timeout to a Request.
+* Broker MAY decide to drop expired Requests (client timeout reached).
 * Client MAY decide to timeout an inactive Request (tracks liveness for Request).
 * Worker SHALL NOT send more W_REPLY (for a Request) after sending first W_REPLY message.
 * Broker SHALL force disconnect Broker if any error occurs.
