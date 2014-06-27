@@ -12,7 +12,7 @@ if (cluster.isMaster) {
 } else {
 
 	(function() {
-		var worker = new Worker('tcp://localhost:5555', 'echo');
+		var worker = new Worker('tcp://localhost:55555', 'echo');
 		worker.start();
 
 		worker.on('error', function(e) {

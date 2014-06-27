@@ -4,7 +4,7 @@ var numCPUs = require('os').cpus().length;
 
 for (var i = 0; i < 8; i++) {
 	(function() {
-		var worker = new Worker('tcp://localhost:5555', 'echo');
+		var worker = new Worker('tcp://localhost:55555', 'echo');
 		worker.start();
 
 		function go(inp, rep) {

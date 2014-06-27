@@ -1,6 +1,6 @@
 var Client = require('./../index').Client;
 
-var client = new Client('tcp://localhost:5555');
+var client = new Client('tcp://localhost:55555');
 client.start();
 
 var rcnt = 0;
