@@ -3,6 +3,59 @@ zmq-omdp
 
 ZeroMQ Obsessive Majordomo Protocol: enhanced version of [ZeroMQ Majordomo Protocol (MDP) v0.2](http://rfc.zeromq.org/spec:7) for Node.JS.
 
+### API
+
+All data sent through the API should be JSON serializable.
+
+#### `omdp.Worker(socket_str, service_name)`
+
+Workers recieve `"request"` events that contain 2 arguments.
+
+* `data` - this is the value sent by a client for this request
+* `response` - this is a writable stream to send data to the client
+
+Take note: due to the framing protocol of `zmq` only the data supplied to `response.end(data)` will be given to the client's final callback.
+
+````
+worker.on('request', function (data, response) {
+  fs.createReadStream(data).pipe(response);
+});
+````
+
+#### `omdp.Client(socket_str)`
+
+Clients may make simple requests using `client.request(...)` with 4 arguments.
+
+* `serviceName` - name of the service we wish to connect to
+* `data` - data to give to the service
+* `partialCallback(data)` - called whenever the request does not end but emits data
+* `finalCallback(err, data)` - called when the request will emit no more data
+
+````
+client.request('echo', 'data', function (data) {
+  // frames sent prior to final frame
+  console.log('partial data', data);
+}, function (err, data) {
+  // this is the final frame sent
+  console.log('final data', data);
+});
+````
+
+Clients may also make streaming request using `client.createRequestStream()` with 2 arguments.
+
+* `serviceName`
+* `data`
+
+````
+client.createRequestStream('echo', 'data').pipe(process.stdout);
+````
+
+#### `omdp.Broker(socket_str)`
+
+Simply starts up a broker.
+
+Take note: when using a `inproc` socket the broker *must* become active before any queued messages.
+
 ####Credits
 Based on https://github.com/nuh-temp/zmq-mdp2 project
 
