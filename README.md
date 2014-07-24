@@ -41,13 +41,13 @@ client.request('echo', 'data', function (data) {
 });
 ````
 
-Clients may also make streaming request using `client.createRequestStream()` with 2 arguments.
+Clients may also make streaming request using `client.requestStream()` with 2 arguments.
 
 * `serviceName`
 * `data`
 
 ````
-client.createRequestStream('echo', 'data').pipe(process.stdout);
+client.requestStream('echo', 'data').pipe(process.stdout);
 ````
 
 #### `omdp.Broker(socket_str)`

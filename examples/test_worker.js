@@ -39,7 +39,7 @@ if (cluster.isMaster) {
 					console.log("REQ ALREADY CLOSED");
 					return;
 				}
-				rep.end("REPLY-" + (new Date().getTime()));
+				rep.end("REPLY_END-" + (new Date().getTime()));
 			}
 
 			if (inp.partial) {
