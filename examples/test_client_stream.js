@@ -1,4 +1,13 @@
-var Client = require('./../index').Client;
+var ZOM = require('./../index');
+
+var mode = process.argv[2];
+var Client;
+
+if (mode == 'json') {
+	Client = ZOM.JSONClient;
+} else {
+	Client = ZOM.Client;
+}
 
 var client = new Client('tcp://localhost:55555');
 client.start();
