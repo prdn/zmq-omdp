@@ -21,20 +21,34 @@ if (cluster.isMaster) {
 
 		function go(inp, rep) {
 
-			function final() {
+			function partial() {
+				rep.heartbeat();
 				if (!rep.active()) {
-					console.log("REQ INACTIVE");
+					final();
+					return;
+				}
+				rep.write('bar_partial-' + (new Date().getTime()));
+			}
+
+			function final() {
+				clearInterval(rtmo);
+				if (!rep.active()) {
+					console.log('REQ INACTIVE');
 				}
 				if (rep.closed()) {
-					console.log("REQ ALREADY CLOSED");
+					console.log('REQ ALREADY CLOSED');
 					return;
 				}
 				rep.end('bar-' + (new Date().getTime()));
 			}
+				
+			var rtmo = setInterval(function() {
+				partial();	
+			}, 250);
 
 			setTimeout(function() {
 				final();
-			}, 1000);
+			}, 30000);
 		}
 
 		worker.on('request', function(inp, rep) {

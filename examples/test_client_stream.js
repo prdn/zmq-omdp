@@ -11,7 +11,7 @@ var rcnt = 0;
 for (var i = 0; i < 6; i++) {
 	(function(i) {
 		client.requestStream(
-			"echo", { partial: true, foo: 'bar' }
+			'echo', 'bar',
 		).pipe(process.stdout);
 	})(i);
 }

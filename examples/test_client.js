@@ -5,14 +5,16 @@ client.start();
 
 var rcnt = 0;
 
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 6; i++) {
 	(function(i) {
 		client.request(
-			"echo", { foo: 'bar' }, 
-			function() {},
-			function(err, data) {
-				console.log("REPLY", i, rcnt++, err, data);
-			}, { timeout: 1 }
+			'echo', 'foo', 
+			function(data) {
+				console.log('REPLY_PARTIAL', i);  
+			}, function(err, data) {
+				rcnt++;
+				console.log('REPLY_FINAL', i, rcnt, err, data);
+			}, { timeout: 240000 }
 		);
 	})(i);
 }
