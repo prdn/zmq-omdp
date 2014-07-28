@@ -5,7 +5,7 @@ ZeroMQ Obsessive Majordomo Protocol: enhanced version of [ZeroMQ Majordomo Proto
 
 ### API
 
-All data sent through the API should be JSON serializable.
+All data sent through the API should be data strings.
 
 #### `omdp.Worker(socket_str, service_name)`
 
@@ -55,6 +55,22 @@ client.requestStream('echo', 'data').pipe(process.stdout);
 Simply starts up a broker.
 
 Take note: when using a `inproc` socket the broker *must* become active before any queued messages.
+
+#### Data encoding / decoding
+
+`omdp.Worker` and `omdp.Client` have two methods, `encode` and `decode`, that can be overridden to handle custom messages formats (i.e JSON or XML).
+
+`.encode(...)` with 1 argument. Must return a string.
+
+* `data` - data to encode
+
+`.decode(...)` with 1 argument. Returns a custom message representation. 
+
+* `data` - data string to decode
+
+##### Builtin JSON support
+
+`omdp.JSONWorker` and `omdp.JSONClient` offer a builtin support for encoding / decoding JSON messages. 
 
 ####Credits
 Based on https://github.com/nuh-temp/zmq-mdp2 project
