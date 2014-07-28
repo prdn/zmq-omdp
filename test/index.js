@@ -3,33 +3,46 @@ var omdp = require('../');
 
 var location = 'inproc://#1';
 
-test('echo server', function (t) {
-    t.plan(3);
+test('echo server (partial/final)', function(t) {
+	t.plan(104);
 
-    var chunk = 'jello, curled!';
+	var chunk = 'foo';
 
-    var worker = new omdp.Worker(location, 'echo');
-    worker.on('request', function (inp, res) {
-      inp = String(inp);
-      t.equal(inp, chunk, 'Worker input is equal to expected');
-      res.end(inp); 
-    });
+	var worker = new omdp.Worker(location, 'echo');
+	worker.on('request', function (inp, res) {
+		inp = String(inp);
+		t.equal(inp, chunk, 'Worker input is equal to expected');
+		for (var i = 0; i < 100; i++) {
+			res.write(inp + i);
+		}
+		res.end(inp + 'FINAL' + (++i)); 
+	});
 
-    var client = new omdp.Client(location);
+	var client = new omdp.Client(location);
 
-    worker.start();
-    client.start();
+	worker.start();
+	client.start();
 
-    setTimeout(function () {
-      var broker = new omdp.Broker(location);
-      broker.start(function () {
-        t.pass('Broker callback was called')
-        client.request('echo', chunk, function () {}, function (err, data) {
-          t.equal(String(data), chunk, 'Worker output is equal to expected');
-          worker.stop();
-          client.stop();
-          broker.stop();
-        });
-      });
-    }, 100);
+	setTimeout(function() {
+		var broker = new omdp.Broker(location);
+		broker.start(function() {
+			t.pass('Broker callback was called');
+
+			var repIx = 0;
+			var d1 = new Date();
+			client.request(
+				'echo', chunk,
+				function(data) {
+					t.equal(String(data), chunk + (repIx++), 'Worker output PARTIAL (' + (repIx - 1) + ')');
+				}, 
+				function(err, data) {
+					t.equal(String(data), chunk + 'FINAL' + (++repIx), 'Worker output FINAL (' + (repIx - 1) + ')');
+					t.equal(true, true, (new Date() - d1) + ' milliseconds');
+					worker.stop();
+					client.stop();
+					broker.stop();
+				}
+			);
+		});
+	}, 100);
 });
