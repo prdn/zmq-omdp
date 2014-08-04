@@ -1,7 +1,8 @@
 var cluster = require('cluster');
 var omdp = require('../');
 
-var chunk = 'foo';
+var chunk = 'foo',
+probes = 100000;
 
 if (cluster.isMaster) {
 	for (var i = 0; i < 3; i++) {
@@ -16,13 +17,16 @@ if (cluster.isMaster) {
 	var workerID = cluster.worker.workerID;
 	if (workerID == 1) {
 		var broker = new omdp.Broker('tcp://*:55559');
-		broker.start(function() {});
+		broker.start(function() {
+			console.log("BROKER started");
+		});
 
 	} else if (workerID == 2) {
 		var worker = new omdp.Worker('tcp://localhost:55559', 'echo');
 		worker.on('request', function(inp, res) {
-			inp = String(inp);
-			for (var i = 0; i < 100; i++) {
+			console.log("WORKER req received");
+			console.log("\tsending " + probes + " probes");
+			for (var i = 0; i < probes; i++) {
 				res.write(inp);
 			}
 			res.end(inp + 'FINAL'); 
@@ -30,24 +34,19 @@ if (cluster.isMaster) {
 		worker.start();
 
 	} else if (workerID == 3) {
-		var test = require('tape');
-		test('echo server (partial/final)', function(t) {
-			var client = new omdp.Client('tcp://localhost:55559');
+		var client = new omdp.Client('tcp://localhost:55559');
 			client.start();
 
-			var repIx = 0;
-			client.request(
-				'echo', chunk,
-				function(data) {
-					t.equal(String(data), chunk, 'Worker output PARTIAL');
-				}, 
-				function(err, data) {
-					t.equal(String(data), chunk + 'FINAL', 'Worker output FINAL');
-					client.stop();
-					t.end();
-					process.exit(-1);
-				}
-			);
-		});
+		var d1 = new Date();
+		client.request(
+			'echo', chunk,
+			function(data) {}, 
+			function(err, data) {
+				var dts = (new Date() - d1);
+				console.log("CLIENT GOT answer", dts + " milliseconds. " + (probes / (dts / 1000)).toFixed(2) + " requests/sec.");
+				client.stop();
+				process.exit(-1);
+			}
+		);
 	}
 }
