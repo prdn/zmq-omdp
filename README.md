@@ -9,7 +9,7 @@ All data sent through the API should be data strings.
 
 #### `omdp.Worker(socket_str, service_name)`
 
-Workers recieve `"request"` events that contain 2 arguments.
+Workers receive `"request"` events that contain 2 arguments.
 
 * `data` - this is the value sent by a client for this request
 * `response` - this is a writable stream to send data to the client
