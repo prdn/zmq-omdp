@@ -3,6 +3,11 @@ zmq-omdp
 
 ZeroMQ Obsessive Majordomo Protocol: enhanced version of [ZeroMQ Majordomo Protocol (MDP) v0.2](http://rfc.zeromq.org/spec:7) for Node.JS.
 
+#### Structure
+* Worker : receives requests, does something and replies. A worker offers a service, should be a functionality as atomic as possible
+* Client : creates, pushes requests and waits for results (if needed). A request always includes a service and a payload/data for the Worker
+* Broker : handles requests queueing and routing
+
 ### API
 
 All data sent through the API should be data strings.
@@ -77,6 +82,13 @@ Based on https://github.com/nuh-temp/zmq-mdp2 project
 
 Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 
+##### Benefits
+* Reliable request / reply protocol
+* Scalability
+* Multi-Worker : infinite services and infinite workers for each service
+* Multi-Client : infinite clients
+* Multi-Broker : infinite brokers to avoid bottlenecks and improve network reliability
+
 #### Features
 * Compatibility with MDP protocol v0.2 .
 * Support for partial replies.
@@ -84,7 +96,7 @@ Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 * Client heartbeating for active requests. Allows Workers to dected whenever Clients disconnect or lose interest in some request. This feature is very useful to stop long-running partial requests (i.e data streaming) allowing Worker to be requeued by the Broker for new tasks.
 * Worker / Broker heartbeating for active / in-progress requests. Allow Clients to detect whenever a Worker quits or dies while processing a Client request.
 
-#### Protocol (good for an RFC)
+#### Protocol (good for RFC)
 * Worker <-> Broker heartbeating.
 * Broker MAY track Worker/Client/Request relation.
 * Broker MAY notify Client on Request dispatch to Worker.
