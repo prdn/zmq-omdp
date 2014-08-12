@@ -82,7 +82,9 @@ Based on https://github.com/nuh-temp/zmq-mdp2 project
 
 Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 
-##### Benefits
+### Protocol
+
+#### Benefits
 * Reliable request / reply protocol
 * Scalability
 * Multi-Worker : infinite services and infinite workers for each service
@@ -96,7 +98,7 @@ Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 * Client heartbeating for active requests. Allows Workers to dected whenever Clients disconnect or lose interest in some request. This feature is very useful to stop long-running partial requests (i.e data streaming) allowing Worker to be requeued by the Broker for new tasks.
 * Worker / Broker heartbeating for active / in-progress requests. Allow Clients to detect whenever a Worker quits or dies while processing a Client request.
 
-#### Protocol (good for RFC)
+#### Specification (good for RFC)
 * Worker <-> Broker heartbeating.
 * Broker MAY track Worker/Client/Request relation.
 * Broker MAY notify Client on Request dispatch to Worker.
