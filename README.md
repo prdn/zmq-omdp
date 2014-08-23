@@ -1,7 +1,7 @@
 zmq-omdp
 ========
 
-ZeroMQ Obsessive Majordomo Protocol: enhanced version of [ZeroMQ Majordomo Protocol (MDP) v0.2](http://rfc.zeromq.org/spec:7) for Node.JS.
+ZeroMQ Obsessive Majordomo Protocol: reliable service-oriented request-reply for NodeJS inspired by [ZeroMQ Majordomo Protocol (MDP) v0.2](http://rfc.zeromq.org/spec:7). 
 
 #### Structure
 * Worker : receives requests, does something and replies. A worker offers a service, should be a functionality as atomic as possible
