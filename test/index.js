@@ -23,26 +23,30 @@ test('echo server (partial/final)', function(t) {
 	worker.start();
 	client.start();
 
-	setTimeout(function() {
-		var broker = new omdp.Broker(location);
-		broker.start(function() {
-			t.pass('Broker callback was called');
+	var broker = new omdp.Broker(location);
+	broker.start(function() {
+		t.pass('Broker callback was called');
+	});
 
-			var repIx = 0;
-			var d1 = new Date();
-			client.request(
-				'echo', chunk,
-				function(data) {
-					t.equal(String(data), chunk + (repIx++), 'Worker output PARTIAL (' + (repIx - 1) + ')');
-				}, 
-				function(err, data) {
-					t.equal(String(data), chunk + 'FINAL' + (++repIx), 'Worker output FINAL (' + (repIx - 1) + ')');
-					t.equal(true, true, (new Date() - d1) + ' milliseconds');
-					worker.stop();
-					client.stop();
-					broker.stop();
-				}
-			);
-		});
-	}, 100);
+	function stop() {
+		worker.stop();
+		client.stop();
+		broker.stop();
+	}
+
+	(function() {
+		var repIx = 0;
+		var d1 = new Date();
+		client.request(
+			'echo', chunk,
+			function(data) {
+				t.equal(String(data), chunk + (repIx++), 'Worker output PARTIAL (' + (repIx - 1) + ')');
+			}, 
+			function(err, data) {
+				t.equal(String(data), chunk + 'FINAL' + (++repIx), 'Worker output FINAL (' + (repIx - 1) + ')');
+				t.equal(true, true, (new Date() - d1) + ' milliseconds');
+				stop();
+			}
+		);
+	})();
 });

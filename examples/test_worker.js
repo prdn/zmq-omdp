@@ -5,8 +5,6 @@ var ZOM = require('./../index');
 var mode = process.argv[2];
 var Worker;
 
-console.log("MODE: " + (mode || 'default'));
-
 if (mode == 'json') {
 	Worker = ZOM.JSONWorker;
 } else {
@@ -14,65 +12,72 @@ if (mode == 'json') {
 }
 
 if (cluster.isMaster) {
-	for (var i = 0; i < numCPUs; i++) {
+	console.log("MODE: " + (mode || 'default'));
+	for (var i = 0; i < 1/*numCPUs*/; i++) {
 		cluster.fork();
 	}
 	cluster.on('exit', function(worker, code, signal) {
 		console.log('worker ' + worker.process.pid + ' died');
 	});
 } else {
+	var workerID = cluster.worker.workerID;
 
-	(function() {
+	for (var i = 0; i < numCPUs; i++) {
+		(function(i) {
+			var wname = "W" + workerID + "/" + i;
+			console.log("CREATING WORKER " + wname);
 
-		function genReply(type) {
-			var msg = 'bar_' + (type || 'unk') + '-' + (new Date().getTime());
-			if (mode == 'json') {
-				return { msg: msg };
+			function genReply(type) {
+				var msg = 'bar_' + (type || 'unk') + '-' + (new Date().getTime());
+				if (mode == 'json') {
+					return { msg: msg };
+				}
+				return msg;
 			}
-			return msg;
-		}
 
-		var worker = new Worker('tcp://localhost:55555', 'echo');
-		worker.start();
+			var worker = new Worker('tcp://localhost:55555', 'echo');
+				worker.start();
 
-		worker.on('error', function(e) {
-			console.log('ERROR', e);
-		});
+			worker.on('error', function(e) {
+				console.log('ERROR', e);
+			});
 
-		function go(inp, rep) {
+			function go(inp, rep) {
 
-			function partial() {
-				rep.heartbeat();
-				if (!rep.active()) {
+				function partial() {
+					rep.heartbeat();
+					if (!rep.active()) {
+						final();
+						return;
+					}
+					rep.write(genReply('partial'));
+				}
+
+				function final() {
+					clearInterval(rtmo);
+					if (!rep.active()) {
+						console.log("REQ INACTIVE");
+					}
+					if (rep.closed()) {
+						console.log("REQ ALREADY CLOSED");
+						return;
+					}
+					rep.end(genReply('final'));
+				}
+
+				var rtmo = setInterval(function() {
+					partial();	
+				}, 250);
+
+				setTimeout(function() {
 					final();
-					return;
-				}
-				rep.write(genReply('partial'));
+				}, 10000);
 			}
 
-			function final() {
-				clearInterval(rtmo);
-				if (!rep.active()) {
-					console.log("REQ INACTIVE");
-				}
-				if (rep.closed()) {
-					console.log("REQ ALREADY CLOSED");
-					return;
-				}
-				rep.end(genReply('final'));
-			}
-
-			var rtmo = setInterval(function() {
-				partial();	
-			}, 250);
-
-			setTimeout(function() {
-				final();
-			}, 10000);
-		}
-
-		worker.on('request', function(inp, rep) {
-			go(inp, rep);	
-		});
-	})();
+			worker.on('request', function(inp, rep) {
+				console.log("WORKER-" + wname + " RECV REQ");
+				go(inp, rep);	
+			});
+		})(i);
+	}
 }
