@@ -29,12 +29,13 @@ worker.on('request', function (data, response) {
 
 #### `omdp.Client(socket_str)`
 
-Clients may make simple requests using `client.request(...)` with 4 arguments.
+Clients may make simple requests using `client.request(...)` with 5 arguments.
 
 * `serviceName` - name of the service we wish to connect to
 * `data` - data to give to the service
 * `partialCallback(data)` - called whenever the request does not end but emits data
 * `finalCallback(err, data)` - called when the request will emit no more data
+* `opts` - options object for the request
 
 ````
 client.request('echo', 'data', function (data) {
@@ -43,17 +44,21 @@ client.request('echo', 'data', function (data) {
 }, function (err, data) {
   // this is the final frame sent
   console.log('final data', data);
-});
+}, { timeout: 5000 });
 ````
 
-Clients may also make streaming request using `client.requestStream()` with 2 arguments.
+Clients may also make streaming request using `client.requestStream()` with 3 arguments.
 
 * `serviceName`
 * `data`
+* `opts`
 
 ````
 client.requestStream('echo', 'data').pipe(process.stdout);
 ````
+
+##### Request options
+* `timeout` : default 60000 (60 seconds). Set -1 to disable
 
 #### `omdp.Broker(socket_str)`
 
