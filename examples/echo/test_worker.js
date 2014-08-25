@@ -1,18 +1,10 @@
 var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
-var ZOM = require('./../index');
+var ZOM = require('./../../index');
 
-var mode = process.argv[2];
-var Worker;
-
-if (mode == 'json') {
-	Worker = ZOM.JSONWorker;
-} else {
-	Worker = ZOM.Worker;
-}
+var Worker = ZOM.Worker;
 
 if (cluster.isMaster) {
-	console.log("MODE: " + (mode || 'default'));
 	for (var i = 0; i < 1/*numCPUs*/; i++) {
 		cluster.fork();
 	}
@@ -28,11 +20,7 @@ if (cluster.isMaster) {
 			console.log("CREATING WORKER " + wname);
 
 			function genReply(type) {
-				var msg = 'bar_' + (type || 'unk') + '-' + (new Date().getTime());
-				if (mode == 'json') {
-					return { msg: msg };
-				}
-				return msg;
+				return 'bar_' + (type || 'unk') + '-' + (new Date().getTime());
 			}
 
 			var worker = new Worker('tcp://localhost:55555', 'echo');
@@ -45,7 +33,7 @@ if (cluster.isMaster) {
 			function go(inp, rep) {
 
 				function partial() {
-					rep.heartbeat();
+					rep.heartbeat(); // optional
 					if (!rep.active()) {
 						final();
 						return;
