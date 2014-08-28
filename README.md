@@ -14,18 +14,34 @@ All data sent through the API should be data strings.
 
 #### `omdp.Worker(socket_str, service_name)`
 
-Workers receive `"request"` events that contain 2 arguments.
+Worker receives `"request"` events that contain 2 arguments:
 
-* `data` - this is the value sent by a client for this request
-* `response` - this is a writable stream to send data to the client
+* `data` - value sent by a client for this request.
+* `reply` - extended writable stream to send data to the client.
 
-Take note: due to the framing protocol of `zmq` only the data supplied to `response.end(data)` will be given to the client's final callback.
+`reply` writable stream exposes also following methods:
+
+* `write` - sends partial data to the client (triggers partial callback). It is used internally to implement writable streams.
+* `end` - sends last data to the client (triggers final callback) and completes/closes current request. Use this method for single-reply requests.
+* `heartbeat` - forces sending heartbeat to the broker and client
+* `active` - returns (boolean) the status of the request. A request becomes inactive when the worker disconnects from the broker or it is discarded by the client or the client disconnects from the broker. This is useful for long running tasks and Worker can monitor whether or not continue processing a request. 
+* `closed` - returns (boolean) if the request has been closed, so the worker cannot push more data to the client.
 
 ````
-worker.on('request', function (data, response) {
-  fs.createReadStream(data).pipe(response);
+worker.on('request', function(data, reply) {
+  fs.createReadStream(data).pipe(reply);
+});
+
+// or
+worker.on('request', function(data, reply) {
+	for (var i = 0; i < 1000; i++) {
+	  res.write('PARTIAL DATA ' + i);
+	}
+	res.end('FINAL DATA');
 });
 ````
+
+Take note: due to the framing protocol of `zmq` only the data supplied to `response.end(data)` will be given to the client's final callback.
 
 #### `omdp.Client(socket_str)`
 
@@ -82,11 +98,6 @@ Take note: when using a `inproc` socket the broker *must* become active before a
 
 `omdp.JSONWorker` and `omdp.JSONClient` offer a builtin support for encoding / decoding JSON messages. 
 
-####Credits
-Based on https://github.com/nuh-temp/zmq-mdp2 project
-
-Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
-
 ### Protocol
 
 #### Benefits
@@ -123,3 +134,6 @@ Thanks to nuh-temp <nuh.temp@gmail.com> or genbit <sergey.genbit@gmail.com>
 
 * Fincluster - cloud financial platform : [fincluster](http://fincluster.com) /  [@fincluster](https://twitter.com/fincluster)
 * My personal blog : [ardoino.com](http://ardoino.com) / [@paoloardoino](https://twitter.com/paoloardoino)
+
+#### Credits
+Based on https://github.com/nuh-temp/zmq-mdp2 project
