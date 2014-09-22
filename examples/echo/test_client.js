@@ -24,7 +24,7 @@ for (var i = 0; i < 6; i++) {
 			}, function(err, data) {
 				rcnt++;
 				console.log('REPLY_FINAL', i, rcnt, err, data);
-			}, { timeout: 240000 }
+			}, { timeout: 10000 }
 		);
 	})(i);
 }

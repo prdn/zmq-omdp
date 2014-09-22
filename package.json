@@ -10,16 +10,17 @@
     "nodejs",
     "zmq",
     "zeromq",
-	"0mq",
-	"omdp",
-	"request-reply",
-	"amqp",
+    "0mq",
+    "omdp",
+    "request-reply",
+    "amqp",
     "mdp",
-	"micro-services"
+    "micro-services"
   ],
   "dependencies": {
     "debug": "",
     "readable-stream": "^1.0.27-1",
+    "shortid": "^2.0.1",
     "zmq": ""
   },
   "engine": {
