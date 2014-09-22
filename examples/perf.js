@@ -33,7 +33,7 @@ if (cluster.isMaster) {
 			var client = new omdp.Client('tcp://127.0.0.1:55559');
 			client.start();
 			
-			var d1 = new Date();
+			var timer = process.hrtime();;
 			var rcnt = 0;
 
 			function acc() {
@@ -43,8 +43,9 @@ if (cluster.isMaster) {
 					return;
 				}
 
-				var dts = (new Date() - d1);
-				console.log("CLIENT GOT answer", dts + " milliseconds. " + (probes / (dts / 1000)).toFixed(2) + " requests/sec.");
+				var elapsed = process.hrtime(timer);
+				var dts = elapsed[0] + (elapsed[1] / 1000000000);
+				console.log("CLIENT GOT answer", dts + " milliseconds. " + (probes / dts).toFixed(2) + " requests/sec.");
 				client.stop();
 				process.exit(-1);
 			}
