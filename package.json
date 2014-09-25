@@ -1,6 +1,6 @@
 {
   "name": "zmq-omdp",
-  "version": "0.0.80",
+  "version": "0.0.81",
   "private": false,
   "description": "ZMQ-OMDP : ZeroMQ Obsessive Majordomo Protocol - reliable and extensible service-oriented request-reply for NodeJS",
   "contributors": [
