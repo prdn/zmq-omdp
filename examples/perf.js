@@ -33,7 +33,7 @@ if (cluster.isMaster) {
 			var client = new omdp.Client('tcp://127.0.0.1:55559');
 			client.start();
 			
-			var timer = process.hrtime();;
+			var timer = process.hrtime();
 			var rcnt = 0;
 
 			function acc() {
