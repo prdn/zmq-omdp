@@ -34,9 +34,13 @@
   "scripts": {
     "test": "tape test"
   },
+  "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github-prdn:prdn/zmq-omdp.git"
+    "url": "https://github.com/prdn/zmq-omdp.git"
   },
-  "license": "ISC"
+  "bugs": {
+    "url": "https://github.com/prdn/zmq-omdp/issues"
+  },
+  "homepage": "https://github.com/prdn/zmq-omdp"
 }
