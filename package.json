@@ -26,7 +26,8 @@
   },
   "main": "index.js",
   "directories": {
-    "example": "examples"
+    "example": "examples",
+    "test": "test"
   },
   "devDependencies": {
     "tape": "^2.13.3"
