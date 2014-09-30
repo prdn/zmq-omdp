@@ -18,11 +18,10 @@
     "micro-services"
   ],
   "dependencies": {
-    "debug": "",
-    "readable-stream": "^1.0.27-1",
-    "shortid": "^2.0.1",
-    "zmq": "",
-	"shortid": ""
+    "debug": "~2.0.0",
+    "readable-stream": "~1.0.32",
+    "shortid": "~2.0.1",
+    "zmq": "~2.8.0"
   },
   "engine": {
     "node": ">=0.10"
