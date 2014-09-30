@@ -3,9 +3,7 @@
   "version": "0.0.84",
   "private": false,
   "description": "ZMQ-OMDP : ZeroMQ Obsessive Majordomo Protocol - reliable and extensible service-oriented request-reply for NodeJS",
-  "contributors": [
-    "prdn <paolo.ardoino@gmail.com>"
-  ],
+  "author": "prdn <paolo.ardoino@gmail.com> (http://ardoino.com/)",
   "keywords": [
     "nodejs",
     "zmq",
@@ -18,18 +16,18 @@
     "micro-services"
   ],
   "dependencies": {
-    "debug": "",
-    "readable-stream": "^1.0.27-1",
-    "shortid": "^2.0.1",
-    "zmq": "",
-	"shortid": ""
+    "debug": "~2.0.0",
+    "readable-stream": "~1.0.32",
+    "shortid": "~2.0.1",
+    "zmq": "~2.8.0"
   },
   "engine": {
     "node": ">=0.10"
   },
   "main": "index.js",
   "directories": {
-    "example": "examples"
+    "example": "examples",
+    "test": "test"
   },
   "devDependencies": {
     "tape": "^2.13.3"
@@ -37,10 +35,13 @@
   "scripts": {
     "test": "tape test"
   },
+  "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github-prdn:prdn/zmq-omdp.git"
+    "url": "https://github.com/prdn/zmq-omdp.git"
   },
-  "author": "prdn <paolo.ardoino@gmail.com> (http://ardoino.com/)",
-  "license": "ISC"
+  "bugs": {
+    "url": "https://github.com/prdn/zmq-omdp/issues"
+  },
+  "homepage": "https://github.com/prdn/zmq-omdp"
 }
