@@ -3,9 +3,7 @@
   "version": "0.0.84",
   "private": false,
   "description": "ZMQ-OMDP : ZeroMQ Obsessive Majordomo Protocol - reliable and extensible service-oriented request-reply for NodeJS",
-  "contributors": [
-    "prdn <paolo.ardoino@gmail.com>"
-  ],
+  "author": "prdn <paolo.ardoino@gmail.com> (http://ardoino.com/)",
   "keywords": [
     "nodejs",
     "zmq",
@@ -40,6 +38,5 @@
     "type": "git",
     "url": "git@github-prdn:prdn/zmq-omdp.git"
   },
-  "author": "prdn <paolo.ardoino@gmail.com> (http://ardoino.com/)",
   "license": "ISC"
 }
