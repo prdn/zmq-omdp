@@ -5,7 +5,7 @@ var ZOM = require('./../../index');
 var Worker = ZOM.Worker;
 
 if (cluster.isMaster) {
-	for (var i = 0; i < 1/*numCPUs*/; i++) {
+	for (var i = 0; i < 1; i++) {
 		cluster.fork();
 	}
 	cluster.on('exit', function(worker, code, signal) {
@@ -14,7 +14,7 @@ if (cluster.isMaster) {
 } else {
 	var workerID = cluster.worker.workerID;
 
-	for (var i = 0; i < numCPUs; i++) {
+	for (var i = 0; i < 1; i++) {
 		(function(i) {
 			var wname = "W" + workerID + "/" + i;
 			console.log("CREATING WORKER " + wname);

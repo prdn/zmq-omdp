@@ -17,14 +17,20 @@ var rcnt = 0;
 
 for (var i = 0; i < 6; i++) {
 	(function(i) {
-		client.request(
+		var req = client.request(
 			'echo', genRequest(), 
 			function(data) {
 				console.log('REPLY_PARTIAL', i, data);  
 			}, function(err, data) {
 				rcnt++;
 				console.log('REPLY_FINAL', i, rcnt, err, data);
+				clearInterval(htmo);
 			}, { timeout: 60000 }
 		);
+		
+		var htmo = setInterval(function() {
+			req.heartbeat();	   
+		}, 1000);
+
 	})(i);
 }
