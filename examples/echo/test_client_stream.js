@@ -7,15 +7,20 @@ function genRequest() {
 };
 
 var client = new Client('tcp://localhost:55555');
-	client.start();
+client.start();
+
 client.on('error', function() {
-	console.log("ERROR", arguments);
+	console.log("CLIENT ERROR", arguments);
 });
 
 for (var i = 0; i < 6; i++) {
 	(function(i) {
-		client.requestStream(
+		var req = client.requestStream(
 			'echo', genRequest()
-		).pipe(process.stdout);
+		).on('error', function() {
+			console.log("REQ ERROR", arguments);
+		});
+		
+		req.pipe(process.stdout);
 	})(i);
 }

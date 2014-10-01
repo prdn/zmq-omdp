@@ -70,7 +70,7 @@ Clients may also make streaming request using `client.requestStream()` with 3 ar
 * `opts`
 
 ````
-client.requestStream('echo', 'data').pipe(process.stdout);
+client.requestStream('echo', 'data', { timeout: -1 }).pipe(process.stdout);
 ````
 
 ##### Request options
