@@ -35,7 +35,6 @@ if (cluster.isMaster) {
 				function partial() {
 					rep.heartbeat(); // optional
 					if (!rep.active()) {
-						final();
 						return;
 					}
 					rep.write(genReply('partial'));
@@ -46,7 +45,7 @@ if (cluster.isMaster) {
 					if (!rep.active()) {
 						console.log("REQ INACTIVE");
 					}
-					if (rep.closed()) {
+					if (rep.ended) {
 						console.log("REQ ALREADY CLOSED");
 						return;
 					}
@@ -55,7 +54,7 @@ if (cluster.isMaster) {
 
 				var rtmo = setInterval(function() {
 					partial();	
-				}, 250);
+				}, 100);
 
 				setTimeout(function() {
 					final();

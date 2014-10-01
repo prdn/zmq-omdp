@@ -16,7 +16,7 @@ client.on('error', function() {
 for (var i = 0; i < 6; i++) {
 	(function(i) {
 		var req = client.requestStream(
-			'echo', genRequest()
+			'echo', genRequest(), { timeout: 120000 }
 		).on('error', function() {
 			console.log("REQ ERROR", arguments);
 		});

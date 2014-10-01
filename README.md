@@ -25,7 +25,7 @@ Worker receives `"request"` events that contain 2 arguments:
 * `end` - sends last data to the client (triggers final callback) and completes/closes current request. Use this method for single-reply requests.
 * `heartbeat` - forces sending heartbeat to the broker and client
 * `active` - returns (boolean) the status of the request. A request becomes inactive when the worker disconnects from the broker or it is discarded by the client or the client disconnects from the broker. This is useful for long running tasks and Worker can monitor whether or not continue processing a request. 
-* `closed` - returns (boolean) if the request has been closed, so the worker cannot push more data to the client.
+* `ended` - returns (boolean) if the request has been ended, so the worker cannot push more data to the client.
 
 ````
 worker.on('request', function(data, reply) {
@@ -120,7 +120,6 @@ Take note: when using a `inproc` socket the broker *must* become active before a
 * Client MAY send heartbeat for active request. If the request is being processed by Worker, Broker forwards heartbeat to Worker. 
 * Worker MAY decide to stop an inactive Request (tracks liveness for Request).
 * Client MAY assign a timeout to a Request.
-* Broker MAY decide to drop expired Requests (client timeout reached).
 * Worker SHALL NOT send more W_REPLY (for a Request) after sending first W_REPLY message.
 * Broker SHALL force disconnect Broker if any error occurs.
 
