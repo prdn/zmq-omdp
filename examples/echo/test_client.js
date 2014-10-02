@@ -22,9 +22,9 @@ for (var i = 0; i < 6; i++) {
 			undefined, undefined, { timeout: 60000 }
 		)
 		.on('data', function(data) {
-			console.log(String(data));
+			console.log("PARTIAL", i, String(data));
 		}).on('end', function() {
-			console.log("END");
+			console.log("END", i);
 		})
 		.on('error', function(err) {
 			console.log("ERROR", err);

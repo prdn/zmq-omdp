@@ -23,11 +23,15 @@ if (cluster.isMaster) {
 			});
 		break;
 		case 2:
-			var worker = new omdp.Worker('tcp://127.0.0.1:55559', 'echo');
-			worker.on('request', function(inp, res) {
-				res.end(inp + 'FINAL');
-			});
-			worker.start();
+			for (var i = 0; i < 1; i++) {
+				(function(i) {
+					var worker = new omdp.Worker('tcp://127.0.0.1:55559', 'echo');
+					worker.on('request', function(inp, res) {
+						res.end(inp + 'FINAL');
+					});
+					worker.start();
+				})(i);
+			}
 		break;
 		case 3:
 			var client = new omdp.Client('tcp://127.0.0.1:55559');
