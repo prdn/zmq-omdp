@@ -5,7 +5,7 @@ var ZOM = require('./../../index');
 var Worker = ZOM.Worker;
 
 if (cluster.isMaster) {
-	for (var i = 0; i < 1; i++) {
+	for (var i = 0; i < numCPUs; i++) {
 		cluster.fork();
 	}
 	cluster.on('exit', function(worker, code, signal) {
@@ -13,58 +13,54 @@ if (cluster.isMaster) {
 	});
 } else {
 	var workerID = cluster.worker.workerID;
+	var wname = "W" + workerID;
 
-	for (var i = 0; i < 1; i++) {
-		(function(i) {
-			var wname = "W" + workerID + "/" + i;
-			console.log("CREATING WORKER " + wname);
+	console.log("WORKER " + wname);
 
-			function genReply(type) {
-				return 'bar_' + (type || 'unk') + '-' + (new Date().getTime());
-			}
-
-			var worker = new Worker('tcp://localhost:55555', 'echo');
-				worker.start();
-
-			worker.on('error', function(e) {
-				console.log('ERROR', e);
-			});
-
-			function go(inp, rep) {
-
-				function partial() {
-					rep.heartbeat(); // optional
-					if (!rep.active()) {
-						return;
-					}
-					rep.write(genReply('partial'));
-				}
-
-				function final() {
-					clearInterval(rtmo);
-					if (!rep.active()) {
-						console.log("REQ INACTIVE");
-					}
-					if (rep.ended) {
-						console.log("REQ ALREADY CLOSED");
-						return;
-					}
-					rep.end(genReply('final'));
-				}
-
-				var rtmo = setInterval(function() {
-					partial();	
-				}, 100);
-
-				setTimeout(function() {
-					final();
-				}, 10000);
-			}
-
-			worker.on('request', function(inp, rep) {
-				console.log("WORKER-" + wname + " RECV REQ");
-				go(inp, rep);	
-			});
-		})(i);
+	function genReply(type) {
+		return 'bar_' + (type || 'unk') + '-' + (new Date().getTime());
 	}
+
+	var worker = new Worker('tcp://localhost:55555', 'echo');
+	worker.start();
+
+	worker.on('error', function(e) {
+		console.log('ERROR', e);
+	});
+
+	function go(inp, rep) {
+
+		function partial() {
+			rep.heartbeat(); // optional
+			if (!rep.active()) {
+				return;
+			}
+			rep.write(genReply('partial'));
+		}
+
+		function final() {
+			clearInterval(rtmo);
+			if (!rep.active()) {
+				console.log("REQ INACTIVE");
+			}
+			if (rep.ended) {
+				console.log("REQ ALREADY CLOSED");
+				return;
+			}
+			rep.end(genReply('final'));
+		}
+
+		var rtmo = setInterval(function() {
+			partial();	
+		}, 10);
+
+		setTimeout(function() {
+			final();
+		}, 5000);
+	}
+
+	worker.on('request', function(inp, rep) {
+		console.log("WORKER-" + wname + " RECV REQ");
+		go(inp, rep);	
+	});
 }

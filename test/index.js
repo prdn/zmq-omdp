@@ -3,8 +3,18 @@ var omdp = require('../');
 
 var location = 'inproc://#1';
 
-test('test server (partial/final)', function(t) {
-	t.plan(8);
+var broker;
+
+test('Broker startup', function(t) {
+	t.plan(1);
+	broker = new omdp.Broker(location);
+	broker.start(function() {
+		t.pass('Broker callback');
+	});
+});
+
+test('partials/final (callback)', function(t) {
+	t.plan(7);
 
 	var chunk = 'foo';
 
@@ -18,24 +28,18 @@ test('test server (partial/final)', function(t) {
 	});
 	worker.start();
 
-	var broker = new omdp.Broker(location);
-	broker.start(function() {
-		t.pass('Broker callback');
-	});
-	
 	var client = new omdp.Client(location);
 	client.start();
 
 	function stop() {
 		worker.stop();
 		client.stop();
-		broker.stop();
 	}
 
 	var repIx = 0;
 	client.request(
 		'test', chunk,
-		function(data) {
+		function(err, data) {
 			t.equal(data, chunk + (repIx++), 'Partial msg matches');
 		}, 
 		function(err, data) {
@@ -45,7 +49,7 @@ test('test server (partial/final)', function(t) {
 	);
 });
 
-test('test server (final/error)', function(t) {
+test('final+error (callback)', function(t) {
 	t.plan(2);
 
 	var chunk = 'SOMETHING_FAILED';
@@ -56,21 +60,17 @@ test('test server (final/error)', function(t) {
 	});
 	worker.start();
 
-	var broker = new omdp.Broker(location);
-	broker.start(function() {});
-	
 	var client = new omdp.Client(location);
 	client.start();
 
 	function stop() {
 		worker.stop();
 		client.stop();
-		broker.stop();
 	}
 
 	client.request(
 		'test', 'foo',
-		function(data) {}, 
+		function(err, data) {},
 		function(err, data) {
 			t.equal(err, chunk, 'Error msg matches');
 			t.equal(data, null, 'Data is not defined');
@@ -79,7 +79,7 @@ test('test server (final/error)', function(t) {
 	);
 });
 
-test('test server (JSON/final)', function(t) {
+test('JSON final (callback)', function(t) {
 	t.plan(2);
 
 	var chunk = { foo: 'bar' };
@@ -90,25 +90,28 @@ test('test server (JSON/final)', function(t) {
 	});
 	worker.start();
 
-	var broker = new omdp.Broker(location);
-	broker.start(function() {});
-	
 	var client = new omdp.JSONClient(location);
 	client.start();
 
 	function stop() {
 		worker.stop();
 		client.stop();
-		broker.stop();
 	}
 
 	client.request(
 		'test', 'foo',
-		function(data) {}, 
+		function(err, data) {},
 		function(err, data) {
 			t.equal(err, null, 'Error is null');
 			t.deepEqual(data, chunk, 'Final message matches');
 			stop();
 		}
 	);
+});
+
+test('Broker stop', function(t) {
+	t.plan(1);
+
+	broker.stop();
+	t.pass('Broker exited');
 });

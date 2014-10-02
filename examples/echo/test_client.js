@@ -19,14 +19,16 @@ for (var i = 0; i < 6; i++) {
 	(function(i) {
 		var req = client.request(
 			'echo', genRequest(), 
-			function(data) {
-				console.log('REPLY_PARTIAL', i, data);  
-			}, function(err, data) {
-				rcnt++;
-				console.log('REPLY_FINAL', i, rcnt, err, data);
-				clearInterval(htmo);
-			}, { timeout: 60000 }
-		);
+			undefined, undefined, { timeout: 60000 }
+		)
+		.on('data', function(data) {
+			console.log(String(data));
+		}).on('end', function() {
+			console.log("END");
+		})
+		.on('error', function(err) {
+			console.log("ERROR", err);
+		});
 		
 		var htmo = setInterval(function() {
 			req.heartbeat();	   
