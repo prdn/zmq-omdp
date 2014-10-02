@@ -19,20 +19,12 @@ for (var i = 0; i < 6; i++) {
 	(function(i) {
 		var req = client.request(
 			'echo', genRequest(), 
-			undefined, undefined, { timeout: 60000 }
-		)
-		.on('data', function(data) {
-			console.log("PARTIAL", i, String(data));
-		}).on('end', function() {
-			console.log("END", i);
-		})
-		.on('error', function(err) {
-			console.log("ERROR", err);
-		});
-		
-		var htmo = setInterval(function() {
-			req.heartbeat();	   
-		}, 1000);
-
+			function(err, data) {
+				console.log("PARTIAL", i, err, data);
+			},
+			function(err, data) {
+				console.log("END", i, err, data);
+			}, { timeout: 60000 }
+		);
 	})(i);
 }
