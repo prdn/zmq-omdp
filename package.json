@@ -30,10 +30,11 @@
     "test": "test"
   },
   "devDependencies": {
-    "tape": "^2.13.3"
+    "chai": "~1.9.2",
+	"mocha": "~1.21.4"
   },
   "scripts": {
-    "test": "tape test"
+    "test": "make test"
   },
   "license": "ISC",
   "repository": {
