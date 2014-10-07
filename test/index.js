@@ -78,6 +78,38 @@ describe('BASE', function() {
 		}
 	});
 
+	it('JSON Client partial/final request (callback)', function(done) {
+		var chunk = { foo: 'bar' };
+
+		var worker = new omdp.Worker(location, 'test');
+
+		worker.on('request', function(inp, res) {
+			res.end(chunk);
+		});
+
+		worker.start();
+
+		var client = new omdp.Client(location);
+		client.start();
+
+		var repIx = 0;
+
+		client.request(
+			'test', 'foo',
+			undefined,
+			function(err, data) {
+				chai.assert.deepEqual(data, chunk);
+				stop();
+			}
+		);
+
+		function stop() {
+			worker.stop();
+			client.stop();
+			done();
+		}
+	});
+
 	it('Client error request (stream)', function(done) {
 		var chunk = 'SOMETHING_FAILED';
 
