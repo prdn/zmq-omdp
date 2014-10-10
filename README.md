@@ -1,6 +1,8 @@
 zmq-omdp
 ========
 
+## !!!!! DEPRECATED REPOSITORY !!!!! PLEASE SWITCH TO [PIGATO](https://github.com/prdn/pigato)
+
 ZeroMQ Obsessive Majordomo Protocol: microservices framework for NodeJS - reliable and extensible service-oriented request-reply inspired by [ZeroMQ Majordomo Protocol (MDP) v0.2](http://rfc.zeromq.org/spec:7). 
 
 #### Structure
